@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic Apple Wallet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .wallet-container {
+            width: 100%;
+            max-width: 420px;
+            perspective: 1000px;
+        }
+        
+        .wallet-pass {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+            margin-bottom: 25px;
+        }
+        
+        .wallet-pass:hover {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+        
+        .pass-header {
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pass-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 8s infinite linear;
+        }
+        
+        .company-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            border-radius: 10px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .pass-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .pass-subtitle {
+            font-size: 16px;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .pass-content {
+            padding: 25px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .user-details h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .user-details p {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+        
+        .pass-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .detail-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detail-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .detail-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .barcode-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .barcode {
+            height: 80px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .barcode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 5px,
+                #000 5px,
+                #000 10px
+            );
+            opacity: 0.7;
+        }
+        
+        .barcode-number {
+            font-family: monospace;
+            letter-spacing: 3px;
+            font-size: 16px;
+        }
+        
+        .pass-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .action-button {
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.6);
+        }
+        
+        .terms {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+        
+        .holographic-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+        
+        .wallet-pass:hover .holographic-effect {
+            opacity: 1;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        .floating-element:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+        
+        .floating-element:nth-child(2) {
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s;
+        }
+        
+        .floating-element:nth-child(3) {
+            top: 80%;
+            left: 10%;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(100px, -100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            border-left: 4px solid #6a11cb;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Payment Cards Section */
+        .cards-section {
+            margin-top: 30px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .payment-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .payment-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .card-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-details {
+            flex: 1;
+        }
+        
+        .card-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .card-number {
+            font-size: 14px;
+            opacity: 0.8;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .card-type {
+            font-size: 12px;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+        
+        .apple-pay-badge {
+            background: #000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        /* Card-specific colors */
+        .visa-card .card-logo {
+            background: linear-gradient(45deg, #1a1f71, #f7b600);
+        }
+        
+        .mastercard-card .card-logo {
+            background: linear-gradient(45deg, #eb001b, #f79e1b);
+        }
+        
+        .amex-card .card-logo {
+            background: linear-gradient(45deg, #2e77bb, #6ec2e8);
+        }
+        
+        .discover-card .card-logo {
+            background: linear-gradient(45deg, #ff6000, #ffa800);
+        }
+        .idno{
+            top: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="wallet-container">
+        <div class="wallet-pass">
+            <div class="floating-elements">
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+            </div>
+            <div class="holographic-effect"></div>
+            <div class="pass-header">
+                <div class="company-logo">
+                    <div class="logo-icon">Q</div>
+                    <div class="logo-text">QUANTUM</div>
+                </div>
+                <h1 class="pass-title">PREMIUM ACCESS</h1>
+                <p class="pass-subtitle">Digital Pass</p>
+            </div>
+            <div class="pass-content">
+                <div class="user-info">
+                    <div class="avatar">AQ</div>
+                    <div class="user-details">
+                        <h3>Aura Qureshi</h3>
+                        <p>Elite Member • Since 2014</p>
+                    </div>
+                </div>
+                <div class="pass-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value">ACTIVE</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Tier</div>
+                        <div class="detail-value">PLATINUM</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Expires</div>
+                        <div class="detail-value">&#8734;</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">ID</div>
+                        <div class="detail-value">#A8F9B2</div>
+                    </div>
+                </div>
+                <div class="barcode-container">
+                    <div class="barcode"></div>
+                    <div class="barcode-number">8 123456 789012</div>
+                </div>
+            </div>
+            <div class="pass-footer">
+                <button class="action-button" id="addToWallet">ADD TO WALLET</button>
+                <div class="terms">Terms & Conditions Apply</div>
+            </div>
+        </div>
+        
+        <div class="cards-section">
+            <h2 class="section-title">Apple Pay Cards</h2>
+            <div class="payment-cards">
+                <div class="payment-card visa-card">
+                    <div class="card-logo">VISA</div>
+                    <div class="card-details">
+                        <div class="card-name">Visa Platinum</div>
+                        <div class="card-number">•••• 4512</div>
+                        <div class="card-type">Credit Card</div>
+                    </div>
+                    <div class="apple-pay-badge">Apple Pay</div>
+                </div>
+                
+                <div class="payment-card mastercard-card">
+                    <div class="card-logo">MC</div>
+                    <div class="card-details">
+                        <div class="card-name">Mastercard World Elite</div>
+                        <div class="card-number">•••• 7821</div>
+                        <div class="card-type">Credit Card</div>
+                    </div>
+                    <div class="apple-pay-badge">Apple Pay</div>
+                </div>
+                
+                <div class="payment-card amex-card">
+                    <div class="card-logo">AMEX</div>
+                    <div class="card-details">
+                        <div class="card-name">American Express Gold</div>
+                        <div class="card-number">•••• 3604</div>
+                        <div class="card-type">Charge Card</div>
+                    </div>
+                    <div class="apple-pay-badge">Apple Pay</div>
+                </div>
+                
+                <div class="payment-card discover-card">
+                    <div class="card-logo">DISC</div>
+                    <div class="card-details">
+                        <div class="card-name">Discover It</div>
+                        <div class="card-number">•••• 9015</div>
+                        <div class="card-type">Credit Card</div>
+                    </div>
+                    <div class="apple-pay-badge">Apple Pay</div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        Pass added to your digital wallet!
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addButton = document.getElementById('addToWallet');
+            const notification = document.getElementById('notification');
+            const walletPass = document.querySelector('.wallet-pass');
+            const paymentCards = document.querySelectorAll('.payment-card');
+            
+            // Add to Wallet button functionality
+            addButton.addEventListener('click', function() {
+                // Add animation to the pass
+                walletPass.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    walletPass.style.transform = '';
+                }, 300);
+                
+                // Show notification
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+                
+                // In a real implementation, this would trigger the Apple Wallet API
+                console.log("Adding pass to Apple Wallet...");
+            });
+            
+            // Mouse move effect for the pass
+            document.addEventListener('mousemove', function(e) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                walletPass.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+            
+            // Reset transform when mouse leaves the container
+            document.querySelector('.wallet-container').addEventListener('mouseleave', function() {
+                walletPass.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            });
+            
+            // Card selection functionality
+            paymentCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove active class from all cards
+                    paymentCards.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked card
+                    this.classList.add('active');
+                    
+                    // Show notification
+                    notification.textContent = "Card selected for Apple Pay";
+                    notification.classList.add('show');
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiny Glassmorphism Notifications</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        
+        /* Tiny Notification Section */
+        .notification-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .notification-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,255,255,0.3), 
+                rgba(255,255,255,0.6), 
+                rgba(255,255,255,0.3), 
+                transparent);
+        }
+        
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .notification-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .notification-badge {
+            background: rgba(106, 17, 203, 0.3);
+            color: #c792ea;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .notification-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .icon-button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .icon-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+        
+        /* Notification Items */
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        /* Custom scrollbar */
+        .notification-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .notification-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .notification-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        
+        .notification-item {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notification-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255,255,255,0.1), 
+                transparent);
+        }
+        
+        .notification-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .notification-item.unread {
+            background: rgba(106, 17, 203, 0.1);
+            border-left: 2px solid #6a11cb;
+        }
+        
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .notification-message {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .notification-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6a11cb;
+            flex-shrink: 0;
+            margin-top: 4px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        /* Footer */
+        .notification-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .view-all {
+            background: transparent;
+            border: none;
+            color: #a1c4fd;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        
+        .view-all:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Demo Controls */
+        .demo-controls {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .demo-button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        
+        .demo-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tiny Notifications</h1>
+        
+        <div class="notification-section">
+            <div class="notification-header">
+                <div class="notification-title">
+                    Notifications
+                    <span class="notification-badge">3 new</span>
+                </div>
+                <div class="notification-actions">
+                    <button class="icon-button">⚙️</button>
+                    <button class="icon-button">⋯</button>
+                </div>
+            </div>
+            
+            <div class="notification-list">
+                <div class="notification-item unread">
+                    <div class="notification-icon">🔔</div>
+                    <div class="notification-content">
+                        <div class="notification-message">Your order #4291 has been shipped and will arrive tomorrow.</div>
+                        <div class="notification-time">10 minutes ago</div>
+                    </div>
+                    <div class="notification-dot"></div>
+                </div>
+                
+                <div class="notification-item unread">
+                    <div class="notification-icon">👤</div>
+                    <div class="notification-content">
+                        <div class="notification-message">Sarah Johnson started following you. Check out their profile.</div>
+                        <div class="notification-time">1 hour ago</div>
+                    </div>
+                    <div class="notification-dot"></div>
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notification-icon">💳</div>
+                    <div class="notification-content">
+                        <div class="notification-message">Monthly subscription payment of $14.99 was processed successfully.</div>
+                        <div class="notification-time">3 hours ago</div>
+                    </div>
+                </div>
+                
+                <div class="notification-item">
+                    <div class="notification-icon">📱</div>
+                    <div class="notification-content">
+                        <div class="notification-message">System update available. New features and performance improvements.</div>
+                        <div class="notification-time">Yesterday</div>
+                    </div>
+                </div>
+                
+                <div class="notification-item unread">
+                    <div class="notification-icon">🎉</div>
+                    <div class="notification-content">
+                        <div class="notification-message">Special offer: £46.50 off; order from very.com/puma.com</div>
+         
+         <div class="notification-message">Payment of $43.50 was processed successfully for 'puma future 7 studded football boots'.</div>
+                        <div class="notification-time">2 days ago</div>            
+                  </div>
+                    <div class="notification-dot"></div>
+                </div>
+            </div>
+            
+            <div class="notification-footer">
+                <div>5 total notifications</div>
+                <button class="view-all">View all</button>
+            </div>
+        </div>
+        
+        <div class="demo-controls">
+            <button class="demo-button" onclick="markAllAsRead()">Mark All as Read</button>
+            <button class="demo-button" onclick="clearAll()">Clear All</button>
+        </div>
+    </div>
+
+    <script>
+        function addNotification() {
+            const notifications = [
+                { icon: '📬', message: 'You have a new message from Alex Thompson.', time: 'Just now' },
+                { icon: '🛒', message: 'Item back in stock: Wireless Earbuds Pro', time: '5 minutes ago' },
+                { icon: '⭐', message: 'Your review was helpful to 12 people', time: '1 hour ago' }
+            ];
+            
+            const randomNotif = notifications[Math.floor(Math.random() * notifications.length)];
+            const notificationList = document.querySelector('.notification-list');
+            const badge = document.querySelector('.notification-badge');
+            const totalCount = document.querySelector('.notification-footer div');
+            
+            const newNotification = document.createElement('div');
+            newNotification.className = 'notification-item unread';
+            newNotification.innerHTML = `
+                <div class="notification-icon">${randomNotif.icon}</div>
+                <div class="notification-content">
+                    <div class="notification-message">${randomNotif.message}</div>
+                    <div class="notification-time">${randomNotif.time}</div>
+                </div>
+                <div class="notification-dot"></div>
+            `;
+            
+            notificationList.prepend(newNotification);
+            
+            // Update badge count
+            const currentCount = parseInt(badge.textContent);
+            badge.textContent = `${currentCount + 1} new`;
+            
+            // Update total count
+            const total = parseInt(totalCount.textContent);
+            totalCount.textContent = `${total + 1} total notifications`;
+            
+            // Add click event to mark as read
+            newNotification.addEventListener('click', function() {
+                this.classList.remove('unread');
+                this.querySelector('.notification-dot').remove();
+                
+                const currentCount = parseInt(badge.textContent);
+                if (currentCount > 1) {
+                    badge.textContent = `${currentCount - 1} new`;
+                } else {
+                    badge.textContent = '0 new';
+                }
+            });
+        }
+        
+        function markAllAsRead() {
+            const unreadItems = document.querySelectorAll('.notification-item.unread');
+            const badge = document.querySelector('.notification-badge');
+            
+            unreadItems.forEach(item => {
+                item.classList.remove('unread');
+                const dot = item.querySelector('.notification-dot');
+                if (dot) dot.remove();
+            });
+            
+            badge.textContent = '0 new';
+        }
+        
+        function clearAll() {
+            const notificationList = document.querySelector('.notification-list');
+            const badge = document.querySelector('.notification-badge');
+            const totalCount = document.querySelector('.notification-footer div');
+            
+            notificationList.innerHTML = '';
+            badge.textContent = '0 new';
+            totalCount.textContent = '0 total notifications';
+        }
+        
+        // Add click event to existing notifications to mark as read
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (this.classList.contains('unread')) {
+                    this.classList.remove('unread');
+                    this.querySelector('.notification-dot').remove();
+                    
+                    const badge = document.querySelector('.notification-badge');
+                    const currentCount = parseInt(badge.textContent);
+                    if (currentCount > 1) {
+                        badge.textContent = `${currentCount - 1} new`;
+                    } else {
+                        badge.textContent = '0 new';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>
